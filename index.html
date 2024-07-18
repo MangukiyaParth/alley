@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alley Games</title>
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-logo">
+                <img src="assets/img/logo.png" alt="Alley">
+                <span class="logo-text">Alley Games</span>
+            </div>
+            <div class="search-div">
+                <img src="assets/img/search_icon.png" class="search-icon" alt="search-icon">
+                <input type="text" class="search-box" name="search" id="search" placeholder="search..." autocomplete="off">
+            </div>
+            <div class="menu-div">
+                <img src="assets/img/menu.png" class="menu-icon" id="toggle_menu" alt="menu-icon">
+            </div>
+        </div>
+    </header>
+    <div class="main-page">
+        <section class="sidebar" id="sidebar">
+            <ul class="category-list">
+                <li class="category-item">
+                    <a href="/">
+                        <img src="assets/img/search_icon.png" alt="menu-icon" class="menu-icon">
+                        <span class="menu-name">Home</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <section class="games-container">
+            <a class="game-item" href="/">
+                <img src="assets/img/sample.png" alt="game1">
+            </a>
+            <a class="game-item" href="/">
+                <img src="assets/img/sample.png" alt="game1">
+            </a>
+            <a class="game-item" href="/">
+                <img src="assets/img/sample.png" alt="game1">
+            </a>
+            <a class="game-item" href="/">
+                <img src="assets/img/sample.png" alt="game1">
+            </a>
+            <a class="game-item" href="/">
+                <img src="assets/img/sample.png" alt="game1">
+            </a>
+            <a class="game-item" href="/">
+                <img src="assets/img/sample.png" alt="game1">
+            </a>
+            <a class="game-item" href="/">
+                <img src="assets/img/sample.png" alt="game1">
+            </a>
+        </section>
+    </div>
+    <div id="backdrop" class="backdrop"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script>
+        $(document).ready(function(){
+            getCategory();
+            // getGames();
+        });
+
+        function getCategory() {
+            $.get("https://gamersaim.com/Apis/games_spot_web/get_category.php", function(data, status){
+                // console.log("Data: " + data + "\nStatus: " + status);
+                if(status == 'success'){
+                    // var key = "mvjfhcbgrjdknclgoidhcjsyrkalswuq";
+                    // var iv = "bhdtfycloudowbvh";
+
+                    // var decryptedData = decryptData(data, key, iv);
+                    // console.log(decryptedData);
+
+                    let resData = JSON.parse(data);
+                    let cat = resData.category;
+                    console.log(cat);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

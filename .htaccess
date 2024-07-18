@@ -1,0 +1,8 @@
+<IfModule mod_php5.c>
+php_flag session.auto_start 1
+</IfModule>
+
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
