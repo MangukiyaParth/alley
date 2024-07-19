@@ -6,3 +6,8 @@ php_flag session.auto_start 1
     Order allow,deny
     Deny from all
 </Files>
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^www\.
+RewriteRule ^(.*)$ http://localhost:8080/HTML/evcar/$1 [R=301,L]
+RewriteRule ^game/([^/]+)/?$ game.html?id=$1  [NC,L]

@@ -30,8 +30,8 @@
                 <span>Loading...</span>
             </ul>
         </section>
-        <section class="games-container" id="game_list">
-            <span>Loading...</span>
+        <section class="games-container play-game">
+            <iframe id="game" class="game-frame"></iframe>
         </section>
     </div>
     <div id="backdrop" class="backdrop"></div>
@@ -41,8 +41,11 @@
     <script>
         $(document).ready(async function(){
             await getCategory();
-            await getGames('all','');
+            var game_link = localStorage.getItem('game-link');
+            $("#game").prop('src', game_link+"?key=9gHj3sP5Kq7Rt4A1fBz0uXmN2vYc6DwE8iF7oLpQbVdSjCkMn");
         });
+
+        
 
         async function getGames(type, cat_name = ""){
             $.ajax({

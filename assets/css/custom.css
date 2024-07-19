@@ -68,7 +68,7 @@ header{
 /***********************/
 .main-page{
     display: flex;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 95px);
 }
 .main-page .sidebar{
     width: 20%;
@@ -79,10 +79,9 @@ header{
     padding: 0 10px;
 }
 .main-page .sidebar .category-list .category-item{
-    padding: 5px;
-}
-.category-item a{
+    padding: 10px;
     display: flex;
+    align-items: center;
 }
 .category-item img{
     height: 25px;
@@ -109,7 +108,16 @@ header{
     object-fit: cover;
 }
 
-
+/************************/
+.play-game{
+    position: relative;
+    display: block;
+}
+.game-frame{
+    width: 75%;
+    height: 105%;
+    border: none;
+}
 /************************/
 @media only screen and (max-width: 600px) {
     .search-div {
@@ -144,7 +152,7 @@ header{
     .main-page .sidebar .category-list {
         text-align: right;
     }
-    .category-item a{
+    .category-item{
         justify-content: flex-end;
     }
     .category-item img{
