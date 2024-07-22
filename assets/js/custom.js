@@ -40,7 +40,7 @@ function decryptData(encryptedData, key, iv) {
     return decryptedData;
 }
 
-function getCategory() {
+function getCategory(is_index_page=true) {
     $.get("https://gamersaim.com/Apis/games_spot_web/get_category.php", function(data, status){
         // console.log("Data: " + data + "\nStatus: " + status);
         if(status == 'success'){
@@ -59,7 +59,7 @@ function getCategory() {
                 if(catData.category == "New Releases"){ type = "new_releases";cat_name=""; }
                 else if(catData.category == "Trending"){ type = "trending";cat_name=""; }
 
-                cat_html += `<li class="category-item" id="cat_${catData.id}" onclick="getGames('${type}','${cat_name}')">
+                cat_html += `<li class="category-item" id="cat_${catData.id}" onclick="getGames('${type}','${cat_name}',${is_index_page})">
                                 <img src="${catData.img}" alt=" " class="menu-icon">
                                 <span class="menu-name">${catData.category}</span>
                             </li>`;
@@ -67,4 +67,34 @@ function getCategory() {
             $("#cat_list").html(cat_html);
         }
     });
+}
+
+async function getGames(type, cat_name = "", is_indx_page=true){
+    $.ajax({
+        type: "POST",
+        url: "https://gamersaim.com/Apis/games_spot_web/category_by_data.php",
+        data: {type:type, category_name:cat_name},
+        dataType: 'json',
+        async: true,
+    }).done(function (response) {
+        var gameData = response;
+        var game_html = "";
+        gameData.forEach(function(game){
+            game_html += `<div class="game-item" onclick="openGame('${game.gamelink}','${game.view_type}','${game.category}');">
+                            <img src="${game.img}" alt="game1" load="lezy">
+                        </div>`;
+        });
+        $("#game_list").html(game_html);
+        if(!is_indx_page){
+            $("#game_list").removeClass('hidden');
+            $(".play-game").addClass('hidden');
+        }
+    });
+}
+
+async function openGame(gamelink, view_type, category){
+    localStorage.setItem('game-link', gamelink);
+    localStorage.setItem('view-type', view_type);
+    localStorage.setItem('game-type', category);
+    window.location.href = 'game.php';
 }

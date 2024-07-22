@@ -11,10 +11,10 @@
 <body>
     <header>
         <div class="header-container">
-            <div class="header-logo">
+            <a class="header-logo" href="index.php">
                 <img src="assets/img/logo.png" alt="Alley">
                 <span class="logo-text">Alley Games</span>
-            </div>
+            </a>
             <div class="search-div">
                 <img src="assets/img/search_icon.png" class="search-icon" alt="search-icon">
                 <input type="text" class="search-box" name="search" id="search" placeholder="search..." autocomplete="off">
@@ -43,31 +43,6 @@
             await getCategory();
             await getGames('all','');
         });
-
-        async function getGames(type, cat_name = ""){
-            $.ajax({
-                type: "POST",
-                url: "https://gamersaim.com/Apis/games_spot_web/category_by_data.php",
-                data: {type:type, category:cat_name},
-                dataType: 'json',
-                async: true,
-            }).done(function (response) {
-                console.log(response);
-                var gameData = response;
-                var game_html = "";
-                gameData.forEach(function(game){
-                    game_html += `<div class="game-item" onclick="openGame('${game.gamelink}');">
-                                    <img src="${game.img}" alt="game1">
-                                </div>`;
-                });
-                $("#game_list").html(game_html);
-            });
-        }
-
-        async function openGame(gamelink){
-            localStorage.setItem('game-link', gamelink);
-            window.location.href = 'game/123';
-        }
     </script>
 </body>
 </html>
