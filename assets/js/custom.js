@@ -80,7 +80,8 @@ async function getGames(type, cat_name = "", is_indx_page=true){
         var gameData = response;
         var game_html = "";
         gameData.forEach(function(game){
-            game_html += `<div class="game-item" onclick="openGame('${game.gamelink}','${game.view_type}','${game.category}','${game.banner_link}');">
+            var gameDetails = JSON.stringify(game);
+            game_html += `<div class="game-item" onclick="openGame('${encodeURIComponent(gameDetails)}');">
                             <img src="${game.img}" alt="game1" load="lezy">
                         </div>`;
         });
@@ -92,10 +93,7 @@ async function getGames(type, cat_name = "", is_indx_page=true){
     });
 }
 
-async function openGame(gamelink, view_type, category, banner_link){
-    localStorage.setItem('game-link', gamelink);
-    localStorage.setItem('view-type', view_type);
-    localStorage.setItem('game-type', category);
-    localStorage.setItem('game-banner', banner_link);
+async function openGame(gameDetail){
+    localStorage.setItem('game-detail', gameDetail);
     window.location.href = 'game.php';
 }

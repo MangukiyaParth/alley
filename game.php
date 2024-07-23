@@ -68,11 +68,18 @@
             <span>Loading...</span>
         </section>
         <section class="games-container play-game">
-            <div class="game-div">
+            <div class="game-div" id="fullscreen_div">
                 <div class="banner-div hidden">
-                    <img class="game-banner w-100" />
+                    <div class="bg-banner-div">
+                        <div class="bg-color"></div>
+                        <img class="game-banner w-100" />
+                    </div>
+                    <div class="game-logo-div">
+                        <img class="game-logo" />
+                        <button class="play-now" >Play Now</button>
+                    </div>
                 </div>
-                <div class="back-btn">
+                <div class="back-btn" id="back_btn">
                     <img src="assets/img/back-icon.png" alt="">
                     <img src="assets/img/back-logo.png" alt="" class="back-logo">
                 </div>
@@ -94,56 +101,84 @@
         let is_interstitial = false;
         let event_name_stored = "";
         let soundCheck = "";
+        let view_type = "";
 
         $(document).ready(async function(){
-            var game_link = localStorage.getItem('game-link');
-            var game_type = localStorage.getItem('game-type');
-            var game_banner = localStorage.getItem('game-banner');
-            var view_type = localStorage.getItem('view-type');
-            if($(window).width() <= mobile_width){
-                $(".banner-div").removeClass("hidden");
-                $(".game-banner").attr("src", game_banner);
-                $("#game").addClass("hidden");
-                // $(".play-game").addClass("fullscreen");
-            }
-            await getCategory(is_index_page=false);
-            await getSimilarGames(game_type);
-            var frame_height = 600;
-            var frame_width = 350;
-            if(view_type == "horizontal"){
-                // frame_width = Math.round($(window).width() - $("#sidebar").width() - 280);
-                frame_width = Math.round($("#game").width() - 20);
-                frame_height = Math.round((4 * frame_width) / 7);
-            }
-            var dimensions = frame_width+"/"+frame_height;
-            $("#game").prop('src', game_link+"?key=9gHj3sP5Kq7Rt4A1fBz0uXmN2vYc6DwE8iF7oLpQbVdSjCkMn");
-            $("#game").on("load", function () {
-                // do something once the iframe is loaded
+            var gameDetail = decodeURIComponent(localStorage.getItem('game-detail'));
+            if(gameDetail){
+                var gameData = JSON.parse(gameDetail, true);
+                var game_link = gameData.gamelink;
+                var game_type = gameData.category;
+                var game_banner = gameData.banner_link;
+                var game_logo = gameData.img;
+                view_type = gameData.view_type;
                 if($(window).width() <= mobile_width){
-                    // alert();
-                    fullScreenGame();
+                    $(".banner-div").removeClass("hidden");
+                    $(".game-banner").attr("src", game_banner);
+                    $(".game-logo").attr("src", game_logo);
+                    $("#game").addClass("hidden");
+                    // $(".play-game").addClass("fullscreen");
                 }
-                else{
-                    setScreenSize(dimensions);
+                await getCategory(is_index_page=false);
+                await getSimilarGames(game_type);
+                var frame_height = 600;
+                var frame_width = 350;
+                if(view_type == "horizontal"){
+                    // frame_width = Math.round($(window).width() - $("#sidebar").width() - 280);
+                    frame_width = Math.round($("#game").width() - 20);
+                    frame_height = Math.round((4 * frame_width) / 7);
                 }
-            });
+                var dimensions = frame_width+"/"+frame_height;
+                $("#game").prop('src', game_link+"?key=9gHj3sP5Kq7Rt4A1fBz0uXmN2vYc6DwE8iF7oLpQbVdSjCkMn");
+                $("#game").on("load", function () {
+                    // do something once the iframe is loaded
+                    if($(window).width() <= mobile_width){
+                        // alert();
+                        fullScreenGame();
+                    }
+                    else{
+                        setScreenSize(dimensions);
+                    }
+                });
+            }
         });
 
-        $(".banner-div").on("click", function(){
+        $(".play-now").on("click", function(){
             $(".play-game").addClass("fullscreen");
             $(".banner-div").addClass("hidden");
             $("#game").removeClass("hidden");
-            const iframe = document.getElementById('game');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.webkitRequestFullscreen) { /* Safari */
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { /* IE11 */
-                iframe.msRequestFullscreen();
+            const screen = document.getElementById('fullscreen_div');
+            if (screen.requestFullscreen) {
+                screen.requestFullscreen();
+            } else if (screen.mozRequestFullScreen) { // Firefox
+                screen.mozRequestFullScreen();
+            } else if (screen.webkitRequestFullscreen) { /* Safari */
+                screen.webkitRequestFullscreen();
+            } else if (screen.msRequestFullscreen) { /* IE11 */
+                screen.msRequestFullscreen();
             }
-            var view_type = localStorage.getItem('view-type');
+            
             if(view_type == "horizontal"){
-                screen.orientation.lock('landscape');//portrait
+                screen.orientation.lock('landscape');
+            }
+        });
+
+        $("#back_btn").on("click", function(){
+            if(view_type == "horizontal"){
+                screen.orientation.lock('portrait');
+            }
+            console.log('call_back');
+            $(".play-game").removeClass("fullscreen");
+            $(".banner-div").removeClass("hidden");
+            $("#game").addClass("hidden");
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { // Firefox
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { // Chrome, Safari, and Opera
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { // IE/Edge
+                document.msExitFullscreen();
             }
         });
 
@@ -156,6 +191,15 @@
             const iframe = document.getElementById('game');
             iframe.contentWindow.postMessage('size_event,' + dimensions, 'https://gamersaimstorage.s3.ap-south-1.amazonaws.com');
         }
+
+        document.addEventListener('fullscreenchange', () => {
+            const buttonContainer = document.getElementById('back_btn');
+            if (document.fullscreenElement) {
+                buttonContainer.style.display = 'flex';
+            } else {
+                buttonContainer.style.display = 'none';
+            }
+        });
 
         function getSimilarGames(game_type){
             $.ajax({
