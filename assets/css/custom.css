@@ -24,6 +24,10 @@ a{
     display: none !important;
 }
 
+.w-100 {
+    width: 100% !important;
+}
+
 .game-suggestion {
     width: 95% !important;
     position: relative;
@@ -139,7 +143,7 @@ header{
 }
 .game-frame{
     width: 75%;
-    height: 600px;
+    height: 620px;
     border: none;
 }
 /************************/
@@ -168,6 +172,21 @@ header{
     color: #555;
     margin: auto;
     max-width: 70vw;
+}
+.back-btn{
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    top: 50%;
+    left: 0;
+    background: #5E6468;
+    padding: 8px 12px 8px 8px;
+    z-index: 10;
+    border-radius: 0 20px 20px 0;
+}
+.back-logo{
+    margin-left: 5px;
 }
 /************************/
 @media only screen and (max-width: 1365px) {
@@ -225,5 +244,34 @@ header{
     .games-container{
         width: 100%;
         grid-template-columns: auto auto;
+    }
+    .play-game{
+        overflow: visible;
+    }
+    .game-frame{
+        width: 100vh;
+        height: 100vw;
+        /* transform: rotate(90deg); */
+        position: absolute;
+        z-index: 3;
+        top: 87px;
+    }
+    .side-ads{
+        display: none;
+    }
+    .fullscreen{
+        object-fit: contain;
+        user-select: text;
+        position: fixed !important;
+        box-sizing: border-box !important;
+        min-width: 0px !important;
+        max-width: none !important;
+        min-height: 0px !important;
+        max-height: none !important;
+        width: 100% !important;
+        height: 100% !important;
+        transform: none !important;
+        inset: 0px !important;
+        margin: 0px !important;    
     }
 }
