@@ -7,6 +7,39 @@
     <link rel="stylesheet" href="assets/css/custom.css">
     <meta name="Keywords" content="">
     <meta name="Description" content="">
+    <!-- <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            
+        };
+        firebase.initializeApp(config);
+
+        var database = firebase.database();
+    </script> -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1zKVxsNfRqEnl5DCtLmyUiy7K3pgj_Rc",
+            authDomain: "alley-b9d49.firebaseapp.com",
+            projectId: "alley-b9d49",
+            storageBucket: "alley-b9d49.appspot.com",
+            messagingSenderId: "466077068329",
+            appId: "1:466077068329:web:d2215cf58588f6fa594038",
+            measurementId: "G-CLVTHKDXPW"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 </head>
 <body>
     <header>
@@ -40,7 +73,7 @@
                 <div class="side-ads">Ads</div>
             </div>
             <div class="bottom-ads">Ads</div>
-            <div class="games-container" id="similler_game_list"></div>
+            <div class="games-container game-suggestion" id="similler_game_list"></div>
         </section>
     </div>
     <div id="backdrop" class="backdrop"></div>
@@ -48,6 +81,12 @@
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/custom.js"></script>
     <script>
+        let is_completeNext = false;
+        let is_videoAd = false;
+        let is_interstitial = false;
+        let event_name_stored = "";
+        let soundCheck = "";
+
         $(document).ready(async function(){
             await getCategory(is_index_page=false);
             var game_link = localStorage.getItem('game-link');
@@ -94,6 +133,81 @@
             });
         }
 
+        function sendUnityMsg(arg) {
+            // "STOP_SOUND"
+            //"PLAY_SOUND"
+            const iframe = document.getElementById('game');
+            iframe.contentWindow.postMessage('unity_event,'+arg, 'https://gamersaimstorage.s3.ap-south-1.amazonaws.com');
+        }
+        window.addEventListener('message', (event) => {
+            if (event.origin !== 'https://gamersaimstorage.s3.ap-south-1.amazonaws.com') return; // Add your WebGL domain
+
+            let args;
+            if (event.data.includes(',')) {
+                args = event.data.split(',');
+            } else {
+                args = [event.data];
+            }
+            
+            if(args[0]=="COMPLETE_NEXT"){
+                event_name_stored=args[1];
+                if(is_completeNext){
+                    if(args.length>2){
+                        soundCheck=args[2];
+                    }
+
+                    setSound(soundCheck, false);
+                    manageAdCloseEvent(soundCheck,false,event_name_stored);
+                }
+                else{
+                    sendUnityMsg(event_name_stored);
+                }
+            }
+            else if(args[0]=="SHOW_VIDEO"){
+                event_name_stored=args[1];
+                if(is_videoAd){
+                    if(args.length>2){
+                        soundCheck=args[2];
+                    }
+                    setSound(soundCheck, false);
+                    manageAdCloseEvent(soundCheck,false,event_name_stored);
+                }
+                else{
+                    sendUnityMsg(event_name_stored);
+                }
+            }
+            else if(args[0]=="SHOW_INTER"){
+                event_name_stored=args[1];
+                if(is_interstitial){
+                    if(args.length>2){
+                        soundCheck=args[2];
+                    }
+                    setSound(soundCheck, false);
+                    manageAdCloseEvent(soundCheck,false,event_name_stored);
+                }
+                else{
+                    sendUnityMsg(event_name_stored);
+                }
+            }
+            console.log('Message received from iframe:', event.data);
+        });
+
+        function setSound(soundCheck, isOn) {
+            if (isOn) {
+                if (soundCheck === "ON" || soundCheck === "") {
+                    sendUnityMsg("PLAY_SOUND");
+                }
+            } else {
+                if (soundCheck === "ON" || soundCheck === "") {
+                    sendUnityMsg("STOP_SOUND");
+                }
+            }
+        }
+
+        function manageAdCloseEvent(soundCheck, isOn, nextevent){
+            setSound(soundCheck, isOn);
+            sendUnityMsg(event_name_stored);
+        }
     </script>
 </body>
 </html>
