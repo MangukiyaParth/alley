@@ -303,3 +303,30 @@ header{
         border-radius: 8px;
     }
 }
+
+/**************************/
+.text-center{
+    text-align: center;
+}
+.privacy-detail{
+    padding: 2%;
+}
+.privacy-detail a{
+    color: #f7b84b;
+    text-decoration: underline;
+}
+.privacy-detail h2{
+    color: #f7b84b;
+}
+.privacy-detail h3{
+    color: #f9c56b;
+}
+.privacy-detail b{
+    color: #ffe5b9;
+}
+.privacy-detail .lite-text{
+    color: #9b9b9b;
+}
+.privacy-detail .sub-menu{
+    padding-left: 5%;
+}

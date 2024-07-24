@@ -1,4 +1,6 @@
-document.getElementById("toggle_menu").onclick = function() {toggleMenu()};
+if(document.getElementById("toggle_menu")){
+    document.getElementById("toggle_menu").onclick = function() {toggleMenu()};
+}
 
 function toggleMenu() {
     document.getElementById("sidebar").classList.toggle("open");
