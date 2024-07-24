@@ -214,7 +214,8 @@
                 var gameData = response;
                 var game_html = "";
                 gameData.forEach(function(game){
-                    game_html += `<div class="game-item" onclick="openGame('${game.gamelink}','${game.view_type}');">
+                    var gameDetails = JSON.stringify(game);
+                    game_html += `<div class="game-item" onclick="openGame('${encodeURIComponent(gameDetails)}');">
                                     <img src="${game.img}" alt="game1" loading="lazy">
                                 </div>`;
                 });
