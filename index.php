@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="assets/css/custom.css">
     <meta name="Keywords" content="">
     <meta name="Description" content="">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4824731361768973" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-4824731361768973">
 </head>
 <body>
     <header>

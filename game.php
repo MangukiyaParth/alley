@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="assets/css/custom.css">
     <meta name="Keywords" content="">
     <meta name="Description" content="">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4824731361768973" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-4824731361768973">
     <!-- <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
     <script>
         // Initialize Firebase
@@ -17,7 +19,7 @@
 
         var database = firebase.database();
     </script> -->
-    <script type="module">
+    <!-- <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
@@ -39,7 +41,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-    </script>
+    </script> -->
 </head>
 <body>
     <header>
