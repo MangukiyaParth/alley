@@ -8,7 +8,21 @@
 * {
     font-family: 'poppins';
     color: #FFF;
+    scrollbar-width: thin;
 }
+/* ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+::-webkit-scrollbar-button {
+    background: #733434;
+}
+::-webkit-scrollbar-track-piece {
+    background: #733434
+}
+::-webkit-scrollbar-thumb {
+    background: #f7b84b
+} */
 
 body{
     padding: 0;
@@ -165,7 +179,7 @@ header{
     padding: 10px;
     color: #555;
     max-width: 20vw;
-    display: none;
+    /* display: none; */
 }
 .bottom-ads{
     background-color: #EEE;
@@ -191,6 +205,19 @@ header{
 }
 .back-logo{
     margin-left: 5px;
+}
+
+#game {
+    overflow: hidden; 
+    border: none;
+}
+
+#side_similar_game_list {
+    grid-template-columns: 47.5% 47.5%;
+    width: 30% !important;
+    height: 600px;
+    overflow: auto;
+    padding: 5px;
 }
 /************************/
 @media only screen and (max-width: 1365px) {

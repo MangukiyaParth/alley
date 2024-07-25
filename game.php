@@ -9,20 +9,14 @@
     <meta name="Description" content="">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4824731361768973" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-4824731361768973">
-    <!-- <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            
-        };
-        firebase.initializeApp(config);
+    <script type="module">
+        let is_completeNext = false;
+        let is_videoAd = false;
+        let is_interstitial = false;
 
-        var database = firebase.database();
-    </script> -->
-    <!-- <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
+        import { getFirestore, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -40,8 +34,17 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-    </script> -->
+        const db = getFirestore(app);
+
+        const querySnapshot = await getDocs(collection(db, "alley"));
+        querySnapshot.forEach((doc) => {
+            const FireRes = doc.data();
+            is_completeNext = FireRes.is_completeNext;
+            is_videoAd = FireRes.is_videoAd;
+            is_interstitial = FireRes.is_interstitial;
+        });
+
+    </script>
 </head>
 <body>
     <header>
@@ -86,6 +89,7 @@
                     <img src="assets/img/back-logo.png" alt="" class="back-logo">
                 </div>
                 <iframe id="game" class="game-frame" allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>
+                <div class="games-container game-suggestion" id="side_similar_game_list"></div>
                 <div class="side-ads">Ads</div>
             </div>
             <div class="bottom-ads">Ads</div>
@@ -98,54 +102,70 @@
     <script src="assets/js/custom.js"></script>
     <script>
         let mobile_width = 600;
-        let is_completeNext = false;
-        let is_videoAd = false;
-        let is_interstitial = false;
         let event_name_stored = "";
         let soundCheck = "";
         let view_type = "";
+        let game_link = "";
+        let game_key = "?key=9gHj3sP5Kq7Rt4A1fBz0uXmN2vYc6DwE8iF7oLpQbVdSjCkMn";
 
         $(document).ready(async function(){
             var gameDetail = decodeURIComponent(localStorage.getItem('game-detail'));
             if(gameDetail){
                 var gameData = JSON.parse(gameDetail, true);
-                var game_link = gameData.gamelink;
+                game_link = gameData.gamelink;
                 var game_type = gameData.category;
                 var game_banner = gameData.banner_link;
                 var game_logo = gameData.img;
                 view_type = gameData.view_type;
+                await getCategory(is_index_page=false);
+                await getSimilarGames(game_type);
+                
                 if($(window).width() <= mobile_width){
                     $(".banner-div").removeClass("hidden");
                     $(".game-banner").attr("src", game_banner);
                     $(".game-logo").attr("src", game_logo);
                     $("#game").addClass("hidden");
-                    // $(".play-game").addClass("fullscreen");
+                    $("#side_similar_game_list").addClass("hidden");
+                    $("#similar_game_list").removeClass("hidden");
                 }
-                await getCategory(is_index_page=false);
-                await getSimilarGames(game_type);
-                var frame_height = 600;
-                var frame_width = 350;
-                if(view_type == "horizontal"){
-                    // frame_width = Math.round($(window).width() - $("#sidebar").width() - 280);
-                    frame_width = Math.round($("#game").width() - 20);
-                    frame_height = Math.round((4 * frame_width) / 7);
-                }
-                var dimensions = frame_width+"/"+frame_height;
-                $("#game").prop('src', game_link+"?key=9gHj3sP5Kq7Rt4A1fBz0uXmN2vYc6DwE8iF7oLpQbVdSjCkMn");
-                $("#game").on("load", function () {
-                    // do something once the iframe is loaded
-                    if($(window).width() <= mobile_width){
-                        // alert();
-                        fullScreenGame();
+                else{
+                    var frame_height = 600;
+                    var frame_width = 350;
+                    if(view_type == "horizontal"){
+                        $("#side_similar_game_list").addClass("hidden");
+                        $("#similar_game_list").removeClass("hidden");
+
+                        frame_width = Math.round($("#game").width() - 20);
+                        frame_height = Math.round((4 * frame_width) / 7);
                     }
-                    else{
+                    else {
+                        $("#side_similar_game_list").removeClass("hidden");
+                        $("#similar_game_list").addClass("hidden");
+
+                        if(($(document).height() - $('header').height()) <= 600){
+                            frame_height = $(document).height() - $('header').height() - 20;
+                            frame_width = Math.round((4 * frame_height) / 7);
+                        }
+                    }
+                    let dimensions = frame_width+"/"+frame_height;
+                    
+                    $("#game").prop('src', game_link+game_key);
+                    $("#game").on("load", function () {
                         setScreenSize(dimensions);
-                    }
-                });
+                    });
+
+                    $("#game").css({
+                        width: frame_width+10,
+                        height: frame_height+10,
+                        overflow: 'hidden',
+                        border: 'none'
+                    });
+                }
             }
         });
 
         $(".play-now").on("click", function(){
+            fullScreenGame();
             $(".play-game").addClass("fullscreen");
             $(".banner-div").addClass("hidden");
             $("#game").removeClass("hidden");
@@ -185,9 +205,11 @@
         });
 
         function fullScreenGame() {
-            const iframe = document.getElementById('game');
-            // document.getElementById("backdrop").classList.toggle("active");
-            iframe.contentWindow.postMessage('fullscreen', 'https://gamersaimstorage.s3.ap-south-1.amazonaws.com');
+            $("#game").prop('src', game_link+game_key);
+            $("#game").on("load", function () {
+                const iframe = document.getElementById('game');
+                iframe.contentWindow.postMessage('fullscreen', 'https://gamersaimstorage.s3.ap-south-1.amazonaws.com');
+            });
         }
         function setScreenSize(dimensions) {
             const iframe = document.getElementById('game');
@@ -219,7 +241,7 @@
                                     <img src="${game.img}" alt="game1" loading="lazy">
                                 </div>`;
                 });
-                $("#similar_game_list").html(game_html);
+                $(".game-suggestion").html(game_html);
             });
         }
 
