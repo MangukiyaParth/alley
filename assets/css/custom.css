@@ -163,30 +163,30 @@ header{
 }
 /************************/
 .sidebar-ads{
-    background-color: #EEE;
+    background-color: transparent;
     width: auto;
     height: 250px;
     padding: 10px;
-    color: #555;
+    color: transparent;
     margin: 10px;
     max-height: 30vh;
-    display: none;
+    /* display: none; */
 }
 .side-ads{
-    background-color: #EEE;
+    background-color: transparent;
     width: 160px;
     height: 600px;
     padding: 10px;
-    color: #555;
+    color: transparent;
     max-width: 20vw;
     /* display: none; */
 }
 .bottom-ads{
-    background-color: #EEE;
+    background-color: transparent;
     width: 728px;
     height: 90px;
     padding: 10px;
-    color: #555;
+    color: transparent;
     margin: auto;
     max-width: 70vw;
     display: none;
