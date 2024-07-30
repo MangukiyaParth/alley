@@ -45,7 +45,7 @@
 
     $(document).ready(async function(){
         var gameDetail = decodeURIComponent(localStorage.getItem('game-detail'));
-        if(gameDetail){
+        if(gameDetail && gameDetail != "null"){
             var gameData = JSON.parse(gameDetail, true);
             game_link = gameData.gamelink;
             var game_type = gameData.category;
@@ -96,6 +96,9 @@
                     border: 'none'
                 });
             }
+        }
+        else {
+            window.location.href = "/index.php";
         }
     });
 
