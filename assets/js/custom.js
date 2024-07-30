@@ -89,7 +89,7 @@ async function getGames(type, cat_name = "", is_indx_page=true){
         });
         $("#game_list").html(game_html);
         if(!is_indx_page){
-            $("#game_list").removeClass('hidden');
+            $("#game_list_section").removeClass('hidden');
             $(".play-game").addClass('hidden');
         }
     });

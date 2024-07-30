@@ -5,8 +5,11 @@
     </ul>
     <div class="sidebar-ads">Ads</div>
 </section>
-<section class="games-container hidden" id="game_list">
-    <span>Loading...</span>
+<section class="games-container hidden" id="game_list_section">
+    <div class="game-list" id="game_list">
+        <span>Loading...</span>
+    </div>
+    <div class="side-ads">Ads</div>
 </section>
 <section class="games-container play-game">
     <div class="game-div" id="fullscreen_div">
